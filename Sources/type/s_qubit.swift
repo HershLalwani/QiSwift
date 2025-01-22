@@ -14,12 +14,16 @@ struct s_qubit: Equatable, CustomStringConvertible {
         self.beta = statevector.at(1, 0)
     }
 
-    public func measure() -> Int {
+    public mutating func measure() -> Int {
         let probabilities = [alpha.mag() * alpha.mag(), beta.mag() * beta.mag()]
         let random = Double.random(in: 0...1)
         if random < probabilities[0] {
+            self.alpha = complex(1, 0)
+            self.beta = complex(0, 0)
             return 0
         } else {
+            self.alpha = complex(0, 0)
+            self.beta = complex(1, 0)
             return 1
         }
     }

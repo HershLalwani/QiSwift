@@ -59,9 +59,14 @@ public class s_qcircuit {
         self.qubits[qubit].beta = betaNew
     }
 
-    public func cnot(_ control: Int, _ target: Int) {
+    public func cx(_ control: Int, _ target: Int) {
         if self.qubits[control].measure() == 1 {
             self.x(target)
+        }
+    }
+    public func cz(_ control: Int, _ target: Int) {
+        if self.qubits[control].measure() == 1 {
+            self.z(target)
         }
     }
 
