@@ -1,43 +1,22 @@
 import Foundation
-import Accelerate
+import simd
 
-var stateUp = s_qubit(complex(1, 0), complex(0, 0))
-var stateDown = s_qubit(complex(0, 0), complex(1, 0))
-var state_x = s_qubit(complex(1, 0), complex(1, 0))
-var state_y = s_qubit(complex(1, 0), complex(0, 1))
+var qbit1 = s_qubit(complex(1, 0), complex(0, 0))
+var qbit2 = s_qubit(complex(1, 0), complex(0, 0))
 
-var sv_up = s_sv(stateUp)
-var sv_down = s_sv(stateDown)
-var sv_x = s_sv(state_x)
-var sv_y = s_sv(state_y)
+var qc = s_qcircuit([qbit1, qbit2])
+qc.h(0)
+qc.cnot(0, 1)
 
-var sv_up_bra = sv_up.conj().T()
-var sv_down_bra = sv_down.conj().T()
-var sv_x_bra = sv_x.conj().T()
-var sv_y_bra = sv_y.conj().T()
+var one = 0
+var zero = 0
+print(qc.getQubits()[0], qc.getQubits()[1])
+for _ in 0..<10000 {
+    if qc.measure() == 0 {
+        zero += 1
+    } else {
+        one += 1
+    }
+}
 
-print("Initial x state: \n \(sv_x)")
-print("Initial y state: \n \(sv_y)")
-print("X After Hermitian conjugate: \n \(sv_x_bra)")
-print("Y After Hermitian conjugate: \n \(sv_y_bra)")
-
-print(sv_x_bra * sv_x)
-
-sv_up.normalize()
-sv_down.normalize()
-sv_x.normalize()
-sv_y.normalize()
-
-sv_up_bra = sv_up.conj().T()
-sv_down_bra = sv_down.conj().T()
-sv_x_bra = sv_x.conj().T()
-sv_y_bra = sv_y.conj().T()
-
-print("==================AFTER NORMALIZATION=====================")
-
-print("Initial x state: \n \(sv_x)")
-print("Initial y state: \n \(sv_y)")
-print("X After Hermitian conjugate: \n \(sv_x_bra)")
-print("Y After Hermitian conjugate: \n \(sv_y_bra)")
-
-print(sv_x_bra * sv_y)
+print("Zero: \(zero), One: \(one)")
